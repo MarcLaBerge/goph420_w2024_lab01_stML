@@ -11,7 +11,7 @@ def main():
     v = wave_data[:,1]
     #X axis will be (t)ime (seconds), Y axis will be (v)elocity (mm/s)
 
-    plt.plot(t, v, 'k-', label = 'S-Wave Arrivals', linewidth = 0.5)
+    plt.plot(t, v, 'r-', label = 'S-Wave Arrivals', linewidth = 0.5)
     plt.ylabel('Velocity (v) [mm/s]')
     plt.xlabel('Time (t) [second]')
     plt.title('Collected data for S-Wave Arrivals')
