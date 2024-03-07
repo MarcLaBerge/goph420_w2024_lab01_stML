@@ -18,7 +18,7 @@ def integrate_newton(x,f,alg = "trap"):
         ValueError:
             If alg contains a str othan than "trap" and "simp" 
         TypeError:
-            If alg is not a str
+            If alg is not a str, python will check
         ValueError:
             If the dimensions of x and f are incompatible
                 Too many dimensions and/or different length
@@ -41,6 +41,44 @@ def integrate_newton(x,f,alg = "trap"):
         raise ValueError ("Array is more than a 1D array")
     if len(x) != len(f):
         raise ValueError (f"The dimensions of x, {len(x)} and the dimensions of f, {len(f)} are not compatible")
+    
+
+    #Get information ready for trapezoid rule
+    N = len(x)
+    interval = N / 2
+    integral = 0
+    #Checking alg's entered value will be through a function
+
+    #Start with trap
+    if alg == "trap":
+        for i in range(0, N-1):
+            #Since we are going one group of data points at a time, I = sum((b-a)/2 * (f(a)+f(b)))
+            integral += ((x[i+1]-x[i]) / 2) * (f[i+1] - f[i])
+        return integral
+    
+    #Simpson's rules
+    elif alg == "simp":
+        #If the amount of intervals is even, need more than 3 data points
+        if N-1 % 2 == 0 and N >= 3:
+            #Simpson's 1/3 rule
+            for i in range (0, N-4, 2):
+                integral += ((x[i+2]-x[i]) / 6) * (f[i]+ 4 * f[i+1] + f[i+2])
+            #Simpson's 3/8 rule
+                #I'm not sure if this is right
+            integral += (1 / 8) * ((x[N-1] - x[N-4]) / 3) * (f[N-4] + 3*f[N-3] + 3*f[N-2] + f[N-1])
+            return integral
+        #If the amount of intervals is odd, needs more than 3 data points
+        elif N-1 % 2 != 0 and N >= 3:
+            integral += (1 / 3)*((x[i+2] - x[i]) / 2) * (f[i]+ 4 * f[i+1] + f[i+2])
+            return integral
+        
+    #If alg is non of the above -> raise ValueError
+    else:
+        raise ValueError ("Invalid algorithm entered, please enter 'simp' or trap'")
+
+
+
+    
 
    
 
