@@ -29,6 +29,7 @@ def integrate_newton(x,f,alg):
             Float
 
     """
+    
     pass
 
 def integrate_gauss(f, lims, npts):
