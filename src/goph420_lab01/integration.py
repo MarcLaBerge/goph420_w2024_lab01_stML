@@ -1,13 +1,13 @@
 import numpy as np
 
-def integrate_newton(x,f,alg):
+def integrate_newton(x,f,alg = "trap"):
     """
     Integration of sample points using Newton-Cotes rules
 
     Parameters:
     -----------
         x:
-            Array like, same shape containing coordinatss and values of the sample points as f
+            Array like, same shape containing coordinates and values of the sample points as f
         f:
             Array like, same shape containing coordinates and values of the sample points as x
         alg:
@@ -16,7 +16,7 @@ def integrate_newton(x,f,alg):
     Raises:
     -------
         ValueError:
-            If alg contains a str othan than "trap" and "str" 
+            If alg contains a str othan than "trap" and "simp" 
         TypeError:
             If alg is not a str
         ValueError:
@@ -29,8 +29,24 @@ def integrate_newton(x,f,alg):
             Float
 
     """
+    #Make sure alg is not case sensitive
+    alg = alg.strip().lower()
     
-    pass
+    #Make x and t arrays
+    x = np.array(x)
+    f = np.array(f)
+
+    #Check that the shape and length of the new x,f arrays are the same shape
+    if len(x.shape) != 1 or len(f.shape) != 1:
+        raise ValueError ("Array is more than a 1D array")
+    if len(x) != len(f):
+        raise ValueError (f"The dimensions of x, {len(x)} and the dimensions of f, {len(f)} are not compatible")
+
+   
+
+      
+    
+    return
 
 def integrate_gauss(f, lims, npts):
     """
@@ -63,7 +79,7 @@ def integrate_gauss(f, lims, npts):
             Float
     """
     pass
-
-
+alg = 'str'
+integrate_newton(1,1,alg)
 
 
