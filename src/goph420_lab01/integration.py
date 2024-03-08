@@ -42,27 +42,23 @@ def integrate_newton(x,f,alg = "trap"):
     if len(x) != len(f):
         raise ValueError (f"The dimensions of x, {len(x)} and the dimensions of f, {len(f)} are not compatible")
     
-
-    #Get information ready for trapezoid rule
-    N = len(x)
-    interval = N / 2
-    integral = 0
     #Checking alg's entered value will be through a function
-
+    N = len(x)
+    integral = 0
     #Start with trap
     if alg == "trap":
-        for i in range(0, N-1):
-            #Since we are going one group of data points at a time, I = sum((b-a)/2 * (f(a)+f(b)))
-            integral += ((x[i+1]-x[i]) / 2) * (f[i+1] - f[i])
+        #Possible error in the f[1] so if weird some to this
+        integral = (x[1] - x[0])/2 + (f[0] + 2*np.sum(f[1:-1]) + f[1])
+
         return integral
-    
+
     #Simpson's rules
     elif alg == "simp":
         #If the amount of intervals is even, need more than 3 data points
         if N-1 % 2 == 0 and N >= 3:
             #Simpson's 1/3 rule
-            for i in range (0, N-4, 2):
-                integral += ((x[i+2]-x[i]) / 6) * (f[i]+ 4 * f[i+1] + f[i+2])
+            for i in range (0,N-4,2):
+                integral += ((x[N+2]-x[N]) / 6) * (f[N]+ 4 * f[N+1] + f[N+2])
             #Simpson's 3/8 rule
                 #I'm not sure if this is right
             integral += (1 / 8) * ((x[N-1] - x[N-4]) / 3) * (f[N-4] + 3*f[N-3] + 3*f[N-2] + f[N-1])
