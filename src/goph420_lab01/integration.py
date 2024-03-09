@@ -47,9 +47,9 @@ def integrate_newton(x,f,alg = "trap"):
     integral = 0
     #Start with trap
     if alg == "trap":
-        #Possible error in the f[1] so if weird some to this
-        integral = (x[1] - x[0])/2 + (f[0] + 2*np.sum(f[1:-1]) + f[1])
-
+        #Possible error in the f[1] so if weird some to this. f[1:-1] starting at index 1 (not 0) 
+        #and then adding everything until the last value
+        integral = (x[1] - x[0])/2 + (f[0] + 2*np.sum(f[1:-1]) + f[-1])
         return integral
 
     #Simpson's rules
@@ -68,15 +68,10 @@ def integrate_newton(x,f,alg = "trap"):
             integral += (1 / 3)*((x[i+2] - x[i]) / 2) * (f[i]+ 4 * f[i+1] + f[i+2])
             return integral
         
-    #If alg is non of the above -> raise ValueError
+    #If alg is non of the above "trap" or "simp"-> raise ValueError
     else:
         raise ValueError ("Invalid algorithm entered, please enter 'simp' or trap'")
 
-
-
-    
-
-   
 
       
     
@@ -89,7 +84,7 @@ def integrate_gauss(f, lims, npts):
     Parameters:
     -----------
         f:
-            Reference to a callable object
+            Reference to a callable object, function or class that implements the __call__() method
         lims:
             Object with a len of 2 that contains the upper and lower bounds (x=a and x=b)
         npts:
@@ -112,8 +107,60 @@ def integrate_gauss(f, lims, npts):
         Integral estimate:
             Float
     """
-    pass
-alg = 'str'
-integrate_newton(1,1,alg)
+    #Check that f is callable
+    try:
+        callable(f)
+    except ValueError:
+        print("Object cannot be called")
+
+    #Check that lims has a length of 2
+    if len(lims) != 2:
+        raise ValueError (f"The dimensions of the limit array is {len(lims)}, must be 2")
+    
+    #Check that npts is in [1,2,3,4,5]
+    if npts not in [1,2,3,4,5]:
+        raise ValueError (f"The number of points is not one of [1,2,3,4,5] please enter one of those numbers of points")
+
+    #Change the lims array values into integer values to use in furture
+    #Raise error if not possible
+    try:
+        a = int(lims[0])
+        b = int(lims[1])
+    except ValueError:
+        print("The upper or lower limit bounds cannot be changed to integers")
+
+    #Start the integral at 0
+    integral = 0
+
+    #Change the value of npts into an interger just incase
+    npts = int(npts)
+    
+
+    #If the number of points = 1, gauss
+    if npts == 1:
+        weights = [2.0]
+        points = [0.0]
+    
+    #If the number of points = 2, gauss
+    elif npts == 2:
+        weights = [1.0, 1.0]
+        points = [-1/np.sqer(3), 1/np.sqrt(3)]
+    
+    #If the number of points = 3
+    elif npts == 3:
+        weights = [5/9, 8/9, 5/9]
+        points = [-1/np.sqrt(3/5), 0, np.sqrt(3/5)]
+
+    #If the number of points = 4
+    elif npts == 4:
+        weights = [(18 - np.sqrt(30))/36, (18 + np.sqrt(30))/36, (18 + np.sqrt(30))/36, (18 - np.sqrt(30))/36 ]
+        points = [(-1*np.sqrt((3/7) + (2/7)*np.sqrt(6/5))), -1*np.sqrt((3/7) - (2/7)*np.sqrt(6/5)), np.sqrt((3/7) - (2/7)*np.sqrt(6/5)), np.sqrt((3/7) + (2/7)*np.sqrt(6/5))]
+
+    #If the number of points = 5
+    elif npts == 5:
+        weights = [(322 - 13*np.sqrt(70))/900, (322 + 13*np.sqrt(70))/900, 128/225, (322 + 13*np.sqrt(70))/900, (322 - 13*np.sqrt(70))/900]
+        points = [-(1/3)*np.sqrt(5+2*np.sqrt(10/7)), -(1/3)*np.sqrt(5-2*np.sqrt(10/7)), 0, (1/3)*np.sqrt(5-2*np.sqrt(10/7)),(1/3)*np.sqrt(5+2*np.sqrt(10/7))]
+
+
 
 
