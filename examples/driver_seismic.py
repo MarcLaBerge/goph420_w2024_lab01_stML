@@ -17,7 +17,7 @@ def main():
     v_abs_max = max(abs(v))
     v_min = 0.005*v_abs_max
     i = np.where(v > v_min)
-    int_limit = max(t[i])
+    int_limit = int(max(t[i]))
     
     
     #Plotting the raw data from s_wave_data.txt
@@ -60,7 +60,7 @@ def main():
         #Diff -> out[i] = arr[i+1] – arr[i] 
         #From Equation 15
     eps_trap = abs(np.diff(int_trap)) / int_trap[:-1]
-    eps_simp = abs(np.diff(int_simp)) / int_simp[:-1]
+    eps_simp = abs(np.diff(int_simp) / int_simp[:-1])
 
 
     #Plot the figure -> curve of the convergence of each integration rule
@@ -69,7 +69,7 @@ def main():
     plt.ylabel("Approximate Relative Error [eps_s]")
     plt.xlabel("Sampling Interval [deltax]")
     plt.legend()
-    plt.savefig("figures/trap_simp_convergence.png")
+    plt.savefig("data/trap_simp_convergence.png")
     plt.close("all")
     
     #------------------------------------------------------------------------------

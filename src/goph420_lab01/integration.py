@@ -49,7 +49,8 @@ def integrate_newton(x,f,alg = "trap"):
     if alg == "trap":
         #Possible error in the f[1] so if weird some to this. f[1:-1] starting at index 1 (not 0) 
         #and then adding everything until the last value
-        integral = (x[1] - x[0])/2 + (f[0] + 2*np.sum(f[1:-1]) + f[-1])
+        for i in range (0,N-1):
+            integral+=((x[i+1]-x[i])/2)*(f[i+1]+f[i])
         return integral
 
     #Simpson's rules
@@ -65,7 +66,8 @@ def integrate_newton(x,f,alg = "trap"):
             return integral
         #If the amount of intervals is odd, needs more than 3 data points
         elif N-1 % 2 != 0 and N >= 3:
-            integral += (1 / 3)*((x[i+2] - x[i]) / 2) * (f[i]+ 4 * f[i+1] + f[i+2])
+            for i in range (0, N-2, 2):
+                integral+=((x[i + 2] - x[i]) / 6) * (f[i] + 4 *f[i + 1]+f[i + 2])
             return integral
         
     #If alg is non of the above "trap" or "simp"-> raise ValueError
