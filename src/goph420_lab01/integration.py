@@ -146,7 +146,7 @@ def integrate_gauss(f, lims, npts):
     #If the number of points = 2, gauss
     elif npts == 2:
         weights = [1.0, 1.0]
-        points = [-1/np.sqer(3), 1/np.sqrt(3)]
+        points = [-1/np.sqrt(3), 1/np.sqrt(3)]
     
     #If the number of points = 3
     elif npts == 3:

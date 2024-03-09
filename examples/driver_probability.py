@@ -10,7 +10,7 @@ def main():
     mean = 1.5
 
     #Function from equation 17
-    f = (1/np.sqrt(2 * np.pi)) * (np.exp((-1 / 2)*((x - mean) / (std_dev) ** 2)))
+    f = lambda x: (1/np.sqrt(2 * np.pi)) * (np.exp((-1 / 2)*((x - mean) / (std_dev) ** 2)))
 
     #Number of points
     npts = [1,2,3,4,5]
@@ -37,7 +37,7 @@ def main():
     plt.ylabel("Relative Error")
     plt.xlabel("Number of points used in the integration")
     plt.title("Probability of a Seimic Event with a magnitude greater than 4.0")
-    plt.savefig("figures/probability_seismic_event_convergence.png")
+    plt.savefig("data/probability_seismic_event_convergence.png")
     plt.close("all")
 
     #-----------------------------------------------------------------------------
@@ -46,7 +46,7 @@ def main():
     mean = 10.28
 
     #Function from equation 17
-    f = (1/np.sqrt(2 * np.pi)) * (np.exp((-1 / 2)*((x - mean) / (std_dev) ** 2)))
+    f = lambda x: (1/np.sqrt(2 * np.pi)) * (np.exp((-1 / 2)*((x - mean) / (std_dev) ** 2)))
     
     #Creating arrays for the convergent integrals as well as the relative errors
     convergent_integrals = []
@@ -70,7 +70,7 @@ def main():
     plt.ylabel("Relative Error")
     plt.xlabel("Number of points used in the integration")
     plt.title("Probability that 10.25m <= Length <= 10.35m")
-    plt.savefig("figures/probability_length_interval_convergence.png")
+    plt.savefig("data/probability_length_interval_convergence.png")
     plt.close("all")
 
 if __name__ == "__main__":
