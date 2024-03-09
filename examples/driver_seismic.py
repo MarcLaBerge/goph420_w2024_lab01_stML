@@ -14,16 +14,19 @@ def main():
 
     
     #Finding the end of the period of time that is reasonable
-    v_abs_max = max(abs(v))
-    v_min = 0.005*v_abs_max
-    i = np.where(v > v_min)
-    int_limit = int(max(t[i]))
+    v_abs_max = np.max(np.abs(v))
+    v_end = 0.005*v_abs_max
+    #i = np.where(np.abs(v) > v_end)
+    #int_limit = int(max(t[i]))
+    for i, _ in enumerate(v):
+        if np.abs(v[i]) > v_end:
+            int_limit = i
     
     
     #Plotting the raw data from s_wave_data.txt
     plt.plot(t, v, 'r-', label = 'S-Wave Arrivals', linewidth = 0.5)
     plt.vlines(x=[0], ymin=[-0.3], ymax=[0.3],colors='green',ls='--',label = 'Period start time')
-    plt.vlines(x=[int_limit], ymin=[-0.3], ymax=[0.3], colors='teal', ls='--', label = 'Period end time')
+    plt.vlines(x=t[int_limit], ymin=[-0.3], ymax=[0.3], colors='teal', ls='--', label = 'Period end time')
     plt.ylabel('Velocity (v) [mm/s]')
     plt.xlabel('Time (t) [second]')
     plt.title('Collected data for S-Wave Arrivals')
@@ -39,7 +42,7 @@ def main():
     t = t[:int_limit]
     v = v[:int_limit]
 
-    #Estimating the integral with different sampling intervals
+    #Estimating the integral with different sampling intervals, I think that bigger intervals won't have enough data points
     intervals = [1,2,4,8,16,32]
     #Stepsize 
     delta_a = [0.01, 0.02, 0.04,0.08,0.16,0.32]
@@ -47,8 +50,7 @@ def main():
     #Create empty array for the integrated values of the rules to be added to
     int_trap = []
     int_simp = []
-    eps_trap = []
-    eps_simp = []
+    
 
     #Implementing the functions with imputs through an interval step size as well as the kind of algorithm to use
     for step in intervals:
@@ -62,9 +64,8 @@ def main():
 
     #Need to find the relative error for figure
         #From Equation 15
-    for i in range (len(intervals) - 1):
-        eps_trap.append(abs(int_trap[i + 1] - int_trap[i]) / int_trap[i + 1])
-        eps_simp.append(abs(int_simp[i + 1] - int_simp[i]) / int_simp[i + 1])
+    eps_trap = np.abs(np.diff(int_trap)) / int_trap[:-1]
+    eps_simp = np.abs(np.diff(int_simp)) / int_simp[:-1]
 
 
     #Plot the figure -> curve of the convergence of each integration rule
@@ -77,10 +78,6 @@ def main():
     plt.close("all")
     
     #------------------------------------------------------------------------------
-
-    
-
-
 
 
 if __name__ == '__main__':

@@ -16,7 +16,7 @@ def main():
     npts = [1,2,3,4,5]
 
     #Creating arrays for the convergent integrals as well as the relative errors
-    convergent_integrals = []
+    converged_integrals = []
     relative_error = []
 
     #Initialization past integral
@@ -27,7 +27,7 @@ def main():
         new_integral = integrate_gauss(f, lims = [1.5, 4], npts = i)
         eps_a = np.abs((new_integral - past_integral) / new_integral)
         #Add the convergence of the integral to the array
-        convergent_integrals.append(new_integral)
+        converged_integrals.append(new_integral)
         #Add the relative error to the empty array
         relative_error.append(eps_a)
         #Replace the old with the new integral, then move on to the next

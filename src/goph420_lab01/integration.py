@@ -36,7 +36,7 @@ def integrate_newton(x,f,alg = "trap"):
     x = np.array(x, dtype = float)
     f = np.array(f, dtype = float)
 
-    #Check that the shape and length of the new x,f arrays are the same shape
+    #Check that the shape and length of new x,f arrays are the same shape
     if len(x.shape) != 1 or len(f.shape) != 1:
         raise ValueError ("Array is more than a 1D array")
     if len(x) != len(f):
@@ -44,48 +44,35 @@ def integrate_newton(x,f,alg = "trap"):
     
     #Checking alg's entered value will be through a function
     N = len(x)
-    integral = 0
+    integral = 0.0
     print(x[1] - x[0])
-    #Start with trap
+#------------------------------------
+    #Trap rule
     if alg == "trap":
-        #Possible error in the f[1] so if weird some to this. f[1:-1] starting at index 1 (not 0) 
-        #and then adding everything until the last value
-        for i in range (0,N-1):
-            integral+=((x[i + 1] - x[i]) / 2) * (f[i + 1] + f[i])
-        return integral
-
+        #np.sum(start(including):stop(excluding):every_#points)
+        integral = ((x[1] - x[0]) / 2) * (f[0] + 2 * np.sum(f[1:-1]) + f[-1])
+        
+#---------------------------------------------
     #Simpson's rules
     elif alg == "simp":
         #If the number of intervals is odd -> all 1/3 rule
-        if N % 2 !=  0:
+        if N % 2:
             #np.sum(start(including):stop(excluding):every_#points)
-            integral = ((x[1] - x[0]) / 3) * (f[0] + 4 * np.sum(f[1 : -4 : 2]) + 2 * np.sum(f[2 : -4 : 2] + f[N-4]))
-            
+            integral = ((x[1] - x[0]) / 3) * (f[0] + 4 * np.sum(f[1 : -1 : 2]) + 2 * np.sum(f[2 : -1 : 2]) + f[-1])
+        
         #If the number of intervals is even -> needs one round of 3/8 rule
         else:
             #If the number is greater than 4, we will use 1/3 rule, if it's 4 then we use 3/8 rule
             if N > 4:
-                intgeral = ((x[1] - x[0]) / 3) * (f[0] + 4 * np.sum(f[1 : -4 : 2]) + 2 * np.sum(f[2 : -4 : 2] + f[N-4]))
+                integral = ((x[1] - x[0]) / 3) * (f[0] + 4 * np.sum(f[1 : -1 : 2]) + 2 * np.sum(f[2 : -1 : 2]) + f[-1])
             #Once N is 4, we will then add on 3/8 rule to finish
-            integral += ((x[1] - x[0]) / 8) * (f[N-4] + 3 * f[N-3] + 3 * f[N-2] + f[N-1])
-            
-
-            #for i in range (0, N-4, 2):
-                #integral += ((x[i+2]-x[i]) / 6) * (f[i]+ 4 * f[i+1] + f[i+2])
-            #Simpson's 3/8 rule
-                #I'm not sure if this is right
-            #integral += (1 / 8) * ((x[N-1] - x[N-4]) / 3) * (f[N-4] + 3*f[N-3] + 3*f[N-2] + f[N-1])
-            #return integral
-        #If the amount of intervals is odd, needs more than 3 data points
-        #elif N-1 % 2 != 0 and N >= 3:
-            #for i in range (0, N-2, 2):
-                #integral+=((x[i + 2] - x[i]) / 6) * (f[i] + 4 *f[i + 1]+f[i + 2])
-        return integral
+            integral += ((x[1] - x[0]) / 8) * (f[-4] + 3 * f[-3] + 3 * f[-2] + f[-1])
         
     #If alg is non of the above "trap" or "simp"-> raise ValueError
     else:
         raise ValueError ("Invalid algorithm entered, please enter 'simp' or trap'")
-
+    
+    return integral
 
 def integrate_gauss(f, lims, npts):
     """
