@@ -71,7 +71,10 @@ def main():
     plt.legend()
     plt.savefig("figures/trap_simp_convergence.png")
     plt.close("all")
-        
+    
+    #------------------------------------------------------------------------------
+
+    
 
 
 
