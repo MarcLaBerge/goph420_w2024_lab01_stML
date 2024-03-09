@@ -31,7 +31,7 @@ def main():
     plt.xlabel('Time (t) [second]')
     plt.title('Collected data for S-Wave Arrivals')
     plt.legend()
-    plt.savefig('data/s_wave_data_figure.png')
+    plt.savefig('figures/s_wave_data_figure.png')
     plt.close('all')
 
     #---------------------------------------------------------------------------
@@ -74,7 +74,7 @@ def main():
     plt.ylabel("Approximate Relative Error [eps_s]")
     plt.xlabel("Sampling Interval [deltax]")
     plt.legend()
-    plt.savefig("data/trap_simp_convergence.png")
+    plt.savefig("figures/trap_simp_convergence.png")
     plt.close("all")
     
     #------------------------------------------------------------------------------

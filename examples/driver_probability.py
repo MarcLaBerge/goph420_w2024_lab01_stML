@@ -38,7 +38,7 @@ def main():
     plt.ylabel("Relative Error")
     plt.xlabel("Number of points used in the integration")
     plt.title("Probability of a Seimic Event with a magnitude greater than 4.0")
-    plt.savefig("data/probability_seismic_event_convergence.png")
+    plt.savefig("figures/probability_seismic_event_convergence.png")
     plt.close("all")
 
     #-----------------------------------------------------------------------------
@@ -73,7 +73,7 @@ def main():
     plt.ylabel("Relative Error")
     plt.xlabel("Number of points used in the integration")
     plt.title("Probability that 10.25m <= Length <= 10.35m")
-    plt.savefig("data/probability_length_interval_convergence.png")
+    plt.savefig("figures/probability_length_interval_convergence.png")
     plt.close("all")
 
 if __name__ == "__main__":
