@@ -32,9 +32,9 @@ def integrate_newton(x,f,alg = "trap"):
     #Make sure alg is not case sensitive
     alg = alg.strip().lower()
     
-    #Make x and t arrays
-    x = np.array(x)
-    f = np.array(f)
+    #Make x and t arrays or floats
+    x = np.array(x, dtype = float)
+    f = np.array(f, dtype = float)
 
     #Check that the shape and length of the new x,f arrays are the same shape
     if len(x.shape) != 1 or len(f.shape) != 1:
@@ -45,39 +45,47 @@ def integrate_newton(x,f,alg = "trap"):
     #Checking alg's entered value will be through a function
     N = len(x)
     integral = 0
+    print(x[1] - x[0])
     #Start with trap
     if alg == "trap":
         #Possible error in the f[1] so if weird some to this. f[1:-1] starting at index 1 (not 0) 
         #and then adding everything until the last value
         for i in range (0,N-1):
-            integral+=((x[i+1]-x[i])/2)*(f[i+1]+f[i])
+            integral+=((x[i + 1] - x[i]) / 2) * (f[i + 1] + f[i])
         return integral
 
     #Simpson's rules
     elif alg == "simp":
-        #If the amount of intervals is even, need more than 3 data points
-        if N-1 % 2 == 0 and N >= 3:
-            #Simpson's 1/3 rule
-            for i in range (0,N-4,2):
-                integral += ((x[N+2]-x[N]) / 6) * (f[N]+ 4 * f[N+1] + f[N+2])
+        #If the number of intervals is odd -> all 1/3 rule
+        if N % 2 !=  0:
+            #np.sum(start(including):stop(excluding):every_#points)
+            integral = ((x[1] - x[0]) / 3) * (f[0] + 4 * np.sum(f[1 : -4 : 2]) + 2 * np.sum(f[2 : -4 : 2] + f[N-4]))
+            
+        #If the number of intervals is even -> needs one round of 3/8 rule
+        else:
+            #If the number is greater than 4, we will use 1/3 rule, if it's 4 then we use 3/8 rule
+            if N > 4:
+                intgeral = ((x[1] - x[0]) / 3) * (f[0] + 4 * np.sum(f[1 : -4 : 2]) + 2 * np.sum(f[2 : -4 : 2] + f[N-4]))
+            #Once N is 4, we will then add on 3/8 rule to finish
+            integral += ((x[1] - x[0]) / 8) * (f[N-4] + 3 * f[N-3] + 3 * f[N-2] + f[N-1])
+            
+
+            #for i in range (0, N-4, 2):
+                #integral += ((x[i+2]-x[i]) / 6) * (f[i]+ 4 * f[i+1] + f[i+2])
             #Simpson's 3/8 rule
                 #I'm not sure if this is right
-            integral += (1 / 8) * ((x[N-1] - x[N-4]) / 3) * (f[N-4] + 3*f[N-3] + 3*f[N-2] + f[N-1])
-            return integral
+            #integral += (1 / 8) * ((x[N-1] - x[N-4]) / 3) * (f[N-4] + 3*f[N-3] + 3*f[N-2] + f[N-1])
+            #return integral
         #If the amount of intervals is odd, needs more than 3 data points
-        elif N-1 % 2 != 0 and N >= 3:
-            for i in range (0, N-2, 2):
-                integral+=((x[i + 2] - x[i]) / 6) * (f[i] + 4 *f[i + 1]+f[i + 2])
-            return integral
+        #elif N-1 % 2 != 0 and N >= 3:
+            #for i in range (0, N-2, 2):
+                #integral+=((x[i + 2] - x[i]) / 6) * (f[i] + 4 *f[i + 1]+f[i + 2])
+        return integral
         
     #If alg is non of the above "trap" or "simp"-> raise ValueError
     else:
         raise ValueError ("Invalid algorithm entered, please enter 'simp' or trap'")
 
-
-      
-    
-    return
 
 def integrate_gauss(f, lims, npts):
     """
@@ -131,6 +139,8 @@ def integrate_gauss(f, lims, npts):
     except ValueError:
         print("The upper or lower limit bounds cannot be changed to integers")
 
+
+
     #Start the integral at 0
     integral = 0
 
@@ -138,39 +148,39 @@ def integrate_gauss(f, lims, npts):
     npts = int(npts)
     
 
-    #If the number of points = 1, gauss
+    #If the number of points = 1
     if npts == 1:
         weights = [2.0]
-        points = [0.0]
+        s_k = [0.0]
     
-    #If the number of points = 2, gauss
+    #If the number of points = 2
     elif npts == 2:
         weights = [1.0, 1.0]
-        points = [-1/np.sqrt(3), 1/np.sqrt(3)]
+        s_k = [-1/np.sqrt(3), 1/np.sqrt(3)]
     
     #If the number of points = 3
     elif npts == 3:
         weights = [5/9, 8/9, 5/9]
-        points = [-1/np.sqrt(3/5), 0, np.sqrt(3/5)]
+        s_k = [-1/np.sqrt(3/5), 0, np.sqrt(3/5)]
 
     #If the number of points = 4
     elif npts == 4:
-        weights = [(18 - np.sqrt(30))/36, (18 + np.sqrt(30))/36, (18 + np.sqrt(30))/36, (18 - np.sqrt(30))/36 ]
-        points = [(-1*np.sqrt((3/7) + (2/7)*np.sqrt(6/5))), -1*np.sqrt((3/7) - (2/7)*np.sqrt(6/5)), np.sqrt((3/7) - (2/7)*np.sqrt(6/5)), np.sqrt((3/7) + (2/7)*np.sqrt(6/5))]
+        weights = [(18 - np.sqrt(30))/36, (18 + np.sqrt(30))/36, (18 + np.sqrt(30))/36, (18 - np.sqrt(30))/36]
+        s_k = [(-1*np.sqrt((3/7) + (2/7)*np.sqrt(6/5))), -1*np.sqrt((3/7) - (2/7)*np.sqrt(6/5)), np.sqrt((3/7) - (2/7)*np.sqrt(6/5)), np.sqrt((3/7) + (2/7)*np.sqrt(6/5))]
 
     #If the number of points = 5
     elif npts == 5:
         weights = [(322 - 13*np.sqrt(70))/900, (322 + 13*np.sqrt(70))/900, 128/225, (322 + 13*np.sqrt(70))/900, (322 - 13*np.sqrt(70))/900]
-        points = [-(1/3)*np.sqrt(5+2*np.sqrt(10/7)), -(1/3)*np.sqrt(5-2*np.sqrt(10/7)), 0, (1/3)*np.sqrt(5-2*np.sqrt(10/7)),(1/3)*np.sqrt(5+2*np.sqrt(10/7))]
+        s_k = [-(1/3)*np.sqrt(5+2*np.sqrt(10/7)), -(1/3)*np.sqrt(5-2*np.sqrt(10/7)), 0, (1/3)*np.sqrt(5-2*np.sqrt(10/7)),(1/3)*np.sqrt(5+2*np.sqrt(10/7))]
 
     #Make an empty array for the new changed weights and points
     transpoints = np.zeros(npts)
     transweights = np.zeros(npts)
 
-    #Finding the changes weights and points
+    #Finding the changes weights and s_k
     for i in range (0, npts):
-        transweights[i] = ((b - a) / 2 * weights[i])
-        transpoints[i] = (0.5 * (a + b)+ 0.5 * (b-a) * points[i])
+        transweights[i] = (((b - a) / 2) * weights[i])
+        transpoints[i] = (0.5 * (a + b) + 0.5 * (b - a) * s_k[i])
 
     #Calculating the integral, need to put the new points into the function
     for i in range (0, npts):

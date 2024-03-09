@@ -40,11 +40,15 @@ def main():
     v = v[:int_limit]
 
     #Estimating the integral with different sampling intervals
-    intervals = [1,2,3,11,12,13]
+    intervals = [1,2,4,8,16,32]
+    #Stepsize 
+    delta_a = [0.01, 0.02, 0.04,0.08,0.16,0.32]
 
     #Create empty array for the integrated values of the rules to be added to
     int_trap = []
     int_simp = []
+    eps_trap = []
+    eps_simp = []
 
     #Implementing the functions with imputs through an interval step size as well as the kind of algorithm to use
     for step in intervals:
@@ -56,16 +60,16 @@ def main():
         int_trap.append(integrated_trap)
         int_simp.append(integrated_simp)
 
-    #Need to find the relative error for plt.loglog 
-        #Diff -> out[i] = arr[i+1] – arr[i] 
+    #Need to find the relative error for figure
         #From Equation 15
-    eps_trap = abs(np.diff(int_trap)) / int_trap[:-1]
-    eps_simp = abs(np.diff(int_simp) / int_simp[:-1])
+    for i in range (len(intervals) - 1):
+        eps_trap.append(abs(int_trap[i + 1] - int_trap[i]) / int_trap[i + 1])
+        eps_simp.append(abs(int_simp[i + 1] - int_simp[i]) / int_simp[i + 1])
 
 
     #Plot the figure -> curve of the convergence of each integration rule
-    plt.loglog(intervals[1:], eps_trap, label = 'Trapezoid rule')
-    plt.loglog(intervals[1:], eps_simp, label = "Simpson's rule")
+    plt.loglog(delta_a[1:], eps_trap, label = 'Trapezoid rule')
+    plt.loglog(delta_a[1:], eps_simp, label = "Simpson's rule")
     plt.ylabel("Approximate Relative Error [eps_s]")
     plt.xlabel("Sampling Interval [deltax]")
     plt.legend()
