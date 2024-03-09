@@ -20,12 +20,13 @@ def main():
     relative_error = []
 
     #Initialization past integral
-    past_integral = 0
+    past_integral = 0.0
 
     #Calculate the probablitiy of a M > 4.0 event, lims upper bound is 4 while the mean of 0.5 is the lower bound
     for i in npts:
         new_integral = integrate_gauss(f, lims = [1.5, 4], npts = i)
-        eps_a = np.abs((new_integral - past_integral) / new_integral)
+        print(new_integral)
+        eps_a = np.abs(new_integral - past_integral) / new_integral
         #Add the convergence of the integral to the array
         converged_integrals.append(new_integral)
         #Add the relative error to the empty array
@@ -44,6 +45,7 @@ def main():
     #initialize given values, standard deviation and the annual mean
     std_dev = 0.05
     mean = 10.28
+    npts = [1,2,3,4,5]
 
     #Function from equation 17
     f = lambda x: (1/np.sqrt(2 * np.pi)) * (np.exp((-1 / 2)*((x - mean) / (std_dev) ** 2)))
@@ -53,14 +55,15 @@ def main():
     relative_error = []
 
     #Initialization past integral
-    past_integral = 0
+    past_integral = 0.0
 
-    #Calculate the probablitiy of a M > 4.0 event, lims upper bound is 4 while the mean of 0.5 is the lower bound
+    
     for i in npts:
         new_integral = integrate_gauss(f, lims = [10.25, 10.35], npts = i)
-        eps_a = np.abs((new_integral - past_integral) / new_integral)
+        print(new_integral)
+        eps_a = np.abs(new_integral - past_integral) / new_integral
         #Add the convergence of the integral to the array
-        convergent_integrals.append(new_integral)
+        converged_integrals.append(new_integral)
         #Add the relative error to the empty array
         relative_error.append(eps_a)
         #Replace the old with the new integral, then move on to the next
