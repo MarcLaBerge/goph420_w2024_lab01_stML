@@ -161,6 +161,18 @@ def integrate_gauss(f, lims, npts):
         weights = [(322 - 13*np.sqrt(70))/900, (322 + 13*np.sqrt(70))/900, 128/225, (322 + 13*np.sqrt(70))/900, (322 - 13*np.sqrt(70))/900]
         points = [-(1/3)*np.sqrt(5+2*np.sqrt(10/7)), -(1/3)*np.sqrt(5-2*np.sqrt(10/7)), 0, (1/3)*np.sqrt(5-2*np.sqrt(10/7)),(1/3)*np.sqrt(5+2*np.sqrt(10/7))]
 
+    #Make an empty array for the new changed weights and points
+    transpoints = np.zeros(npts)
+    transweights = np.zeros(npts)
 
+    #Finding the changes weights and points
+    for i in range (0, npts):
+        transweights[i] = ((b - a) / 2 * weights[i])
+        transpoints[i] = (0.5 * (a + b)+ 0.5 * (b-a) * points[i])
+
+    #Calculating the integral, need to put the new points into the function
+    for i in range (0, npts):
+        integral += transweights[i] * f(transpoints[i])
+    return integral
 
 
