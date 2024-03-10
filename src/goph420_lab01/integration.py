@@ -74,7 +74,7 @@ def integrate_newton(x,f,alg = "trap"):
     
     return integral
 
-def integrate_gauss(f, lims, npts):
+def integrate_gauss(f, lims, npts = 3):
     """
     Integration from sample points using Gauss-Legendre quadrature
 
@@ -105,10 +105,8 @@ def integrate_gauss(f, lims, npts):
             Float
     """
     #Check that f is callable
-    try:
-        callable(f)
-    except ValueError:
-        print("Object cannot be called")
+    if not callable(f):
+        raise TypeError(f"The function {f} is not callable")
 
     #Check that lims has a length of 2
     if len(lims) != 2:
@@ -121,57 +119,52 @@ def integrate_gauss(f, lims, npts):
     #Change the lims array values into integer values to use in furture
     #Raise error if not possible
     try:
-        a = int(lims[0])
-        b = int(lims[1])
+        a = float(lims[0])
+        b = float(lims[1])
     except ValueError:
         print("The upper or lower limit bounds cannot be changed to integers")
-
-
-
-    #Start the integral at 0
-    integral = 0
-
-    #Change the value of npts into an interger just incase
-    npts = int(npts)
     
-
     #If the number of points = 1
     if npts == 1:
-        weights = [2.0]
         s_k = [0.0]
+        c_k = [2.0]
     
     #If the number of points = 2
     elif npts == 2:
-        weights = [1.0, 1.0]
-        s_k = [-1/np.sqrt(3), 1/np.sqrt(3)]
+        s_k = [- 1 / np.sqrt(3), 1 / np.sqrt(3)]
+        c_k = [1.0, 1.0]
     
     #If the number of points = 3
     elif npts == 3:
-        weights = [5/9, 8/9, 5/9]
-        s_k = [-1/np.sqrt(3/5), 0, np.sqrt(3/5)]
+        s_k = [- np.sqrt(3/5), 0.0, np.sqrt(3/5)]
+        c_k = [5/9, 8/9, 5/9]
 
     #If the number of points = 4
     elif npts == 4:
-        weights = [(18 - np.sqrt(30))/36, (18 + np.sqrt(30))/36, (18 + np.sqrt(30))/36, (18 - np.sqrt(30))/36]
         s_k = [(-1*np.sqrt((3/7) + (2/7)*np.sqrt(6/5))), -1*np.sqrt((3/7) - (2/7)*np.sqrt(6/5)), np.sqrt((3/7) - (2/7)*np.sqrt(6/5)), np.sqrt((3/7) + (2/7)*np.sqrt(6/5))]
-
+        c_k = [(18 - np.sqrt(30))/36, (18 + np.sqrt(30))/36, (18 + np.sqrt(30))/36, (18 - np.sqrt(30))/36]
     #If the number of points = 5
     elif npts == 5:
-        weights = [(322 - 13*np.sqrt(70))/900, (322 + 13*np.sqrt(70))/900, 128/225, (322 + 13*np.sqrt(70))/900, (322 - 13*np.sqrt(70))/900]
         s_k = [-(1/3)*np.sqrt(5+2*np.sqrt(10/7)), -(1/3)*np.sqrt(5-2*np.sqrt(10/7)), 0, (1/3)*np.sqrt(5-2*np.sqrt(10/7)),(1/3)*np.sqrt(5+2*np.sqrt(10/7))]
+        c_k = [(322 - 13*np.sqrt(70))/900, (322 + 13*np.sqrt(70))/900, 128/225, (322 + 13*np.sqrt(70))/900, (322 - 13*np.sqrt(70))/900]
 
-    #Make an empty array for the new changed weights and points
-    transpoints = np.zeros(npts)
-    transweights = np.zeros(npts)
+    #Make an empty array for the new changed/transfromed weights and points
+    transpoints = [0]
+    transweights = [0]
+    
+    #Put the transformed points into the function into an array for the function
+    for i, j in enumerate(s_k):
+        tran_s_k = 0.5*(a + b)+ 0.5 * (b - a) * s_k[i]
+        f_k = f(tran_s_k)
+        transpoints.append(f_k)
+        print(transpoints)
+    
+    for i, j in enumerate(c_k):
+        wk = 0.5* (b - a) * c_k[i]
+        transweights.append(wk)
+        print(transweights)
 
-    #Finding the changes weights and s_k
-    for i in range (0, npts):
-        transweights[i] = (((b - a) / 2) * weights[i])
-        transpoints[i] = (0.5 * (a + b) + 0.5 * (b - a) * s_k[i])
-
-    #Calculating the integral, need to put the new points into the function
-    for i in range (0, npts):
-        integral += transweights[i] * f(transpoints[i])
+    #Calculating the integral (sum of the product of the transformed weights and the function of the transformed points)
+    integral = np.sum(np.array(transweights) * np.array(transpoints))
     return integral
-
 

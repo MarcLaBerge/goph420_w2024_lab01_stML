@@ -19,7 +19,7 @@ class TestNewtonCotes(unittest.TestCase):
     #Test simp rule with odd number of data points
     def testSimpOdd(self):
         self.x = [0,1,2]
-        self.f = -1 * self.x ** 2
+        self.f = [0,-1,-4]
         self.newInt = integrate_newton(self.x,self.f, alg = "simp")
         #Check that they're equal
         expected = -1 * (8 / 3)
@@ -28,10 +28,10 @@ class TestNewtonCotes(unittest.TestCase):
     #Test simp rule with even number of data points
     def testSimpEven(self):
         self.x = [0,1,2,3]
-        self.f = -1 * self.x ** 2
+        self.f = [0,-1,-4,-9]
         self.newInt = integrate_newton(self.x, self.f, alg = "simp")
         #Check that they're equal
-        expected = - 9
+        expected = -9
         self.assertAlmostEqual(self.newInt, expected)
 
 
