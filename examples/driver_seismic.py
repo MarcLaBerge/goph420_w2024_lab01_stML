@@ -25,8 +25,8 @@ def main():
     
     #Plotting the raw data from s_wave_data.txt
     plt.plot(t, v, 'r-', label = 'S-Wave Arrivals', linewidth = 0.5)
-    plt.vlines(x=[0], ymin=[-0.3], ymax=[0.3],colors='green',ls='--',label = 'Period start time')
-    plt.vlines(x=t[int_limit], ymin=[-0.3], ymax=[0.3], colors='teal', ls='--', label = 'Period end time')
+    plt.vlines(x=[0], ymin=[-0.3], ymax=[0.3],colors='green',ls='-',label = 'Period start time')
+    plt.vlines(x=t[int_limit], ymin=[-0.3], ymax=[0.3], colors='teal', ls='-', label = 'Period end time')
     plt.ylabel('Velocity (v) [mm/s]')
     plt.xlabel('Time (t) [second]')
     plt.title('Collected data for S-Wave Arrivals')
@@ -70,9 +70,10 @@ def main():
 
     #Plot the figure -> curve of the convergence of each integration rule
     plt.loglog(delta_a[1:], eps_trap, label = 'Trapezoid rule', color = 'red')
-    plt.loglog(delta_a[1:], eps_simp, label = "Simpson's rule", color = 'purple')
+    plt.loglog(delta_a[1:], eps_simp, label = "Simpson's rules", color = 'purple')
     plt.ylabel("Approximate Relative Error (Ɛa)")
     plt.xlabel("Sampling Interval (Δt)")
+    plt.title("Error convergence of Newton-Cotes rules")
     plt.legend()
     plt.savefig("figures/trap_simp_convergence.png")
     plt.close("all")

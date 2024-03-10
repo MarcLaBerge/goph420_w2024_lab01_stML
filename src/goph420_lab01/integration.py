@@ -55,7 +55,7 @@ def integrate_newton(x,f,alg = "trap"):
     #Simpson's rules
     elif alg == "simp":
         #If the number of intervals is odd -> all 1/3 rule
-        if N % 2:
+        if N % 2 != 0:
             #np.sum(start(including):stop(excluding):every_#points)
             integral = ((x[1] - x[0]) / 3) * (f[0] + 4 * np.sum(f[1 : -1 : 2]) + 2 * np.sum(f[2 : -1 : 2]) + f[-1])
         
