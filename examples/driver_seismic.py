@@ -69,10 +69,10 @@ def main():
 
 
     #Plot the figure -> curve of the convergence of each integration rule
-    plt.loglog(delta_a[1:], eps_trap, label = 'Trapezoid rule')
-    plt.loglog(delta_a[1:], eps_simp, label = "Simpson's rule")
-    plt.ylabel("Approximate Relative Error [eps_s]")
-    plt.xlabel("Sampling Interval [deltax]")
+    plt.loglog(delta_a[1:], eps_trap, label = 'Trapezoid rule', color = 'red')
+    plt.loglog(delta_a[1:], eps_simp, label = "Simpson's rule", color = 'purple')
+    plt.ylabel("Approximate Relative Error (Ɛa)")
+    plt.xlabel("Sampling Interval (Δt)")
     plt.legend()
     plt.savefig("figures/trap_simp_convergence.png")
     plt.close("all")

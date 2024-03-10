@@ -45,7 +45,6 @@ def integrate_newton(x,f,alg = "trap"):
     #Checking alg's entered value will be through a function
     N = len(x)
     integral = 0.0
-    print(x[1] - x[0])
 #------------------------------------
     #Trap rule
     if alg == "trap":
@@ -157,12 +156,12 @@ def integrate_gauss(f, lims, npts = 3):
         tran_s_k = 0.5*(a + b)+ 0.5 * (b - a) * s_k[i]
         f_k = f(tran_s_k)
         transpoints.append(f_k)
-        print(transpoints)
+        
     
     for i, j in enumerate(c_k):
         wk = 0.5* (b - a) * c_k[i]
         transweights.append(wk)
-        print(transweights)
+        
 
     #Calculating the integral (sum of the product of the transformed weights and the function of the transformed points)
     integral = np.sum(np.array(transweights) * np.array(transpoints))

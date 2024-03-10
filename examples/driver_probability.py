@@ -25,7 +25,6 @@ def main():
     #Calculate the probablitiy of a M > 4.0 event, lims upper bound is 4 while the mean of 0.5 is the lower bound
     for i in npts:
         new_integral = integrate_gauss(f, lims = [1.5, 4], npts = i)
-        #print(new_integral)
         eps_a = np.abs(new_integral - past_integral) / new_integral
         #Add the convergence of the integral to the array
         converged_integrals.append(new_integral)
@@ -35,9 +34,9 @@ def main():
         past_integral = new_integral
 
     plt.loglog(npts, relative_error, 'teal')
-    plt.ylabel("Relative Error")
-    plt.xlabel("Number of points used in the integration")
-    plt.title("Probability of a Seimic Event with a magnitude greater than 4.0")
+    plt.ylabel("Approximate Relative Error (Ɛa)")
+    plt.xlabel("Number of points (npts) used in the integration")
+    plt.title("Probability of a Seimic Event with a magnitude greater than 4.0""\nP(M>= 4.0)")
     plt.savefig("figures/probability_seismic_event_convergence.png")
     plt.close("all")
 
@@ -60,7 +59,6 @@ def main():
     
     for i in npts:
         new_integral = integrate_gauss(f, lims = [10.25, 10.35], npts = i)
-        #print(new_integral)
         eps_a = np.abs(new_integral - past_integral) / new_integral
         #Add the convergence of the integral to the array
         converged_integrals.append(new_integral)
@@ -69,10 +67,10 @@ def main():
         #Replace the old with the new integral, then move on to the next
         past_integral = new_integral
 
-    plt.loglog(npts, relative_error, 'teal')
-    plt.ylabel("Relative Error")
-    plt.xlabel("Number of points used in the integration")
-    plt.title("Probability that 10.25m <= Length <= 10.35m")
+    plt.loglog(npts, relative_error, 'Blue')
+    plt.ylabel("Approximate Relative Error (Ɛa)")
+    plt.xlabel("Number of points (npts) used in the integration")
+    plt.title("Probability that 10.25m <= Length <= 10.35m""\nP(10.25 <= L <= 10.35)")
     plt.savefig("figures/probability_length_interval_convergence.png")
     plt.close("all")
 
